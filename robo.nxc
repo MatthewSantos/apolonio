@@ -1,0 +1,38 @@
+#define white 40
+#define black 30
+task main(){
+	SetSensorLight(IN_1);      /* Configura o sensor de luz da entrada 1 */
+	  SetSensorLight(IN_2);    /* Configura outro sensor para a entrada 2 */
+	  int vin;     /* Variável inteira vin */
+	  vin = 55;    /* vin receba o valor 30 */
+	  	
+	while(true){              /* abrimos um while para entrar em um loop infinito */
+		NumOut(40,LCD_LINE1, Sensor(IN_1)); 
+		NumOut(60,LCD_LINE1, Sensor(IN_2));
+		while(Sensor(IN_1) > white && Sensor(IN_2) > white){
+	 		OnFwd(OUT_A, vin+18);                             /* enquanto os sensores lerem o valor do branco o robô irá para frente */
+	 		OnFwd(OUT_B, vin); 
+         Wait(100);                            /* espera 100 milisegundos até algum sensor lê o valor do preto */
+		}
+		while(Sensor(IN_2) < white && Sensor(IN_1) >= black){                                                                                            
+    /* quando o sensor2 lê um valor menor que 40 e o sensor1 maior igual a 30 ele irá reajustar o caminho para ficarem com valores iguais */
+	 		int mf = 15;
+      int horu = 15;
+			OnFwd(OUT_A, vin+mf);
+			OnRev(OUT_B, vin);
+			Wait(300);
+			horu++;
+		}
+
+		while(Sensor(IN_1) < white  && Sensor(IN_2) >= black){
+   /* quando o sensor1 lê um valor menor que 40 e o sensor2 maior igual a 30 ele irá reajustar o caminho para ficarem com valores iguais */
+			int	horu = 15;
+      int mf = 15;
+			OnFwd(OUT_B, vin+horu);
+			OnRev(OUT_A, vin);
+			Wait(300);
+			mf++; 
+    }
+	}
+}
+
